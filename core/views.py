@@ -2,13 +2,9 @@ from django.shortcuts import render, redirect
 from urllib.parse import urlencode
 import requests
 from django.conf import settings
-
 from django.contrib.auth import login as auth_login, logout as auth_logout
-
 from core.models import CustomUser
-
-
-# Create your views here.
+from django.contrib.auth.decorators import login_required
 
 
 def frontpage(request):
@@ -50,6 +46,8 @@ def linkedin_callback(request):
 
     if response.status_code == 200:
         access_token = response.json().get('access_token')
+        # Store the access token in the user's session
+        request.session['linkedin_access_token'] = access_token
         # Fetch user data from LinkedIn
         linkedin_profile_url = 'https://api.linkedin.com/v2/userinfo'
         headers = {'Authorization': f'Bearer {access_token}'}
@@ -82,14 +80,35 @@ def linkedin_callback(request):
         return redirect('login')  # Redirect to login page or handle error gracefully
 
 
+@login_required
 def profile(request):
     return render(request, "profile.html")
 
 
 def logout(request):
+    # Retrieve the access token from the user's session
+    access_token = request.session.get('linkedin_access_token')
+
     # Log the user out
     auth_logout(request)
 
+    # Revoke the access token if it exists
+    if access_token:
+        revoke_token_url = 'https://www.linkedin.com/oauth/v2/revoke'
+        revoke_token_params = {
+            'token': access_token,
+            'client_id': settings.LINKEDIN_CLIENT_ID,
+            'client_secret': settings.LINKEDIN_CLIENT_SECRET,
+        }
+        revoke_response = requests.post(revoke_token_url, data=revoke_token_params)
+
+        # Check if the token revocation was successful
+        if revoke_response.status_code == 200:
+            # Clear the access token from the user's session
+            request.session.pop('linkedin_access_token', None)
+            print("Logout successful")
+        else:
+            print("Logout failed")
+
     # Redirect to a page after logout, such as the homepage
     return redirect('frontpage')
-
