@@ -36,7 +36,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
-
+    linkedin_access_token = models.CharField(max_length=255, blank=True, null=True)
+    linkedin_sub = models.CharField(max_length=255, blank=True, null=True)
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'

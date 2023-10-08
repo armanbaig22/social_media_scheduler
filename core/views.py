@@ -48,22 +48,35 @@ def linkedin_callback(request):
     if response.status_code == 200:
         access_token = response.json().get('access_token')
         request.session['linkedin_access_token'] = access_token
+        # Fetch LinkedIn user data using the access token
         linkedin_profile_url = 'https://api.linkedin.com/v2/userinfo'
         headers = {'Authorization': f'Bearer {access_token}'}
         linkedin_response = requests.get(linkedin_profile_url, headers=headers)
+
         if linkedin_response.status_code == 200:
             linkedin_data = linkedin_response.json()
-
+            sub = linkedin_data.get('sub')
             email = linkedin_data.get('email')
-            if email:
 
-                user, created = CustomUser.objects.get_or_create(email=email)
+            # Check if the user with this LinkedIn email exists
+            try:
+                user = CustomUser.objects.get(email=email)
+            except CustomUser.DoesNotExist:
+                user = None
 
-                auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            # Create a new user if it doesn't exist
+            if not user:
+                user = CustomUser.objects.create_user(email=email)
 
-                return redirect('profile')
-            else:
-                return redirect('login')
+            # Update the user's access_token and sub
+            user.linkedin_access_token = access_token
+            user.linkedin_sub = sub
+            user.save()
+
+            # Log the user in
+            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+            return redirect('profile')
         else:
             return redirect('login')
     else:
