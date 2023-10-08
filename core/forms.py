@@ -24,6 +24,15 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content', 'media', 'scheduled_datetime', 'status']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Get the choices for the 'status' field and exclude 'posted'
+        status_choices = [(key, value) for key, value in Post.STATUS_CHOICES if key != 'posted']
+
+        # Update the 'status' field choices
+        self.fields['status'].choices = status_choices
+
     def clean(self):
         cleaned_data = super().clean()
         scheduled_datetime = cleaned_data.get('scheduled_datetime')

@@ -5,7 +5,7 @@ from django.utils import timezone
 from core.models import Post
 import requests
 import json
-
+from django.conf import settings
 # Create celery task
 
 
@@ -22,7 +22,7 @@ def schedule_and_post_content():
         sub = post.user.linkedin_sub
         if post.media:
 
-            image_file_path = f'/media/{post.media}'
+            image_file_path = settings.MEDIA_ROOT + str(post.media)
 
             # Step 1: Register the image for upload
             register_upload_url = 'https://api.linkedin.com/v2/assets?action=registerUpload'

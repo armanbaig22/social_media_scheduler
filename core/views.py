@@ -58,15 +58,7 @@ def linkedin_callback(request):
             sub = linkedin_data.get('sub')
             email = linkedin_data.get('email')
 
-            # Check if the user with this LinkedIn email exists
-            try:
-                user = CustomUser.objects.get(email=email)
-            except CustomUser.DoesNotExist:
-                user = None
-
-            # Create a new user if it doesn't exist
-            if not user:
-                user = CustomUser.objects.create_user(email=email)
+            user, created = CustomUser.objects.get_or_create(email=email)
 
             # Update the user's access_token and sub
             user.linkedin_access_token = access_token
@@ -143,7 +135,7 @@ def create_post(request):
 @login_required()
 def view_posts(request):
     user = request.user
-    scheduled_posts = Post.objects.filter(user=user, status__in=['draft', 'schedule'])
+    scheduled_posts = Post.objects.filter(user=user, status__in=['draft', 'schedule', 'posted'])
 
     context = {
         'scheduled_posts': scheduled_posts
