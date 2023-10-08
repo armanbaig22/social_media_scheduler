@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Modify Post | {% endblock %}
+
+{% block content %}
+  <h1>Modify Post</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Post</button>
+  </form>
+  <br>
+  <a href="{% url 'view_posts' %}">Back to View Posts</a>
+{% endblock %}

@@ -72,9 +72,10 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
     'schedule-and-post-content': {
         'task': 'core.tasks.schedule_and_post_content',
-        'schedule': timedelta(seconds=5),  # Adjust the interval as needed
+        'schedule': timedelta(seconds=5),  # interval after which celery beats
     },
 }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
