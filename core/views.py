@@ -5,6 +5,9 @@ from django.conf import settings
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from core.models import CustomUser
 from django.contrib.auth.decorators import login_required
+from .forms import CreatePostForm
+from .models import Post
+from .utils import generate_unique_filename, handle_uploaded_file
 
 
 def frontpage(request):
@@ -112,3 +115,45 @@ def logout(request):
 
     # Redirect to a page after logout, such as the homepage
     return redirect('frontpage')
+
+
+@login_required
+def create_post(request):
+    if request.method == 'POST':
+        form = CreatePostForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            # Handle media file upload
+            media_file = form.cleaned_data.get('media')
+            if media_file:
+                # Generate a unique filename for the media file
+                unique_filename = generate_unique_filename(media_file.name)
+                # Save the media file with the unique filename
+                file_path = handle_uploaded_file(media_file)
+            else:
+                # If no media file is provided, set file_path to None
+                file_path = None
+
+            # Create a new Post object
+            new_post = Post(
+                user=request.user,
+                title=form.cleaned_data['title'],
+                content=form.cleaned_data['description'],
+                media=file_path,
+                scheduled_datetime=form.cleaned_data['schedule_datetime'],
+                status=form.cleaned_data['post_type'],
+                # Add other fields as needed
+            )
+            new_post.save()
+            # Redirect to a success page or do other processing
+            return redirect('profile')  # Adjust the redirect URL as needed
+    else:
+        form = CreatePostForm()
+
+    return render(request, 'create_post.html', {'form': form})
+
+
+@login_required()
+def view_posts(request):
+    posts = Post.objects.all()
+    return render(request, 'view_posts.html', {'posts': posts})

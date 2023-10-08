@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}View Posts | {% endblock %}
+
+{% block content %}
+<h1>View Posts</h1>
+<ul>
+    {% for post in posts %}
+        <li>
+            <strong>ID:</strong> {{ post.id }}
+            <strong>User Email:</strong> {{ post.user.email }}
+            <strong>Title:</strong> {{ post.title }}<br>
+            <strong>Content:</strong> {{ post.content }}<br>
+            {% if post.media.url != None %}
+                <strong>Media:</strong> {{ post.media.url }}<br>
+            {% endif %}
+            <strong>Scheduled Datetime:</strong> {{ post.scheduled_datetime }}<br>
+            <strong>Status:</strong> {{ post.status }}<br>
+            <strong>Created At:</strong> {{ post.created_at }}<br>
+            <strong>Updated At:</strong> {{ post.updated_at }}
+        </li>
+        <hr>
+    {% empty %}
+        <li>No posts available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
