@@ -22,14 +22,14 @@ def schedule_and_post_content():
         sub = post.user.linkedin_sub
         if post.media:
 
-            image_file_path = settings.MEDIA_ROOT + str(post.media)
+            image_file_path = settings.MEDIA_ROOT + "/" + str(post.media)
 
             # Step 1: Register the image for upload
             register_upload_url = 'https://api.linkedin.com/v2/assets?action=registerUpload'
             headers = {
+                'Content-Type': 'application/json',
                 'Authorization': f'Bearer {access_token}',
                 'X-Restli-Protocol-Version': '2.0.0',
-                'Content-Type': 'application/json',
             }
             register_upload_data = {
                 "registerUploadRequest": {
@@ -45,13 +45,9 @@ def schedule_and_post_content():
             }
             response = requests.post(register_upload_url, headers=headers, data=json.dumps(register_upload_data))
 
-            if response.status_code == 201:
-                upload_url = response.json().get('value', {}).get('uploadMechanism', {}).get(
+            upload_url = response.json().get('value', {}).get('uploadMechanism', {}).get(
                     'com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest', {}).get('uploadUrl')
-                asset_urn = response.json().get('value', {}).get('asset')
-            else:
-                print(f"Error registering the image: {response.text}")
-                exit()
+            asset_urn = response.json().get('value', {}).get('asset')
 
             # Step 2: Upload the image file
             with open(image_file_path, 'rb') as image_file:
@@ -59,10 +55,6 @@ def schedule_and_post_content():
                     'Authorization': f'Bearer {access_token}',
                 }
                 response = requests.put(upload_url, headers=headers, data=image_file)
-
-            if response.status_code != 200:
-                print(f"Error uploading the image: {response.text}")
-                exit()
 
             # Step 3: Create an image share using the asset URN
             image_share_url = 'https://api.linkedin.com/v2/ugcPosts'
