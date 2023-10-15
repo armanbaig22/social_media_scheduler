@@ -5,7 +5,12 @@ from django.utils import timezone
 
 class CreatePostForm(forms.Form):
     title = forms.CharField(max_length=100, label='Title', widget=forms.TextInput(attrs={'class': 'form-control mb-3'}))
-    description = forms.CharField(label='Description',widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows': 4}))
+    description = forms.CharField(
+    label='Description',
+    widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows': 4}),
+    required=False,  # If applicable
+)
+
     media = forms.FileField(label='Media (Image/Video)', required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control mb-3'}))
     post_type = forms.ChoiceField(
         choices=[('draft', 'Draft'), ('schedule', 'Schedule')],
