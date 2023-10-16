@@ -1,13 +1,36 @@
 {% extends 'base.html' %}
 
-{% block title %}Create Post| {% endblock %}
+{% block title %}Create Post | {% endblock %}
 
 {% block content %}
-    <h2>Create a New Post</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-
-        <button type="submit" class="btn btn-primary">Create Post</button>
-    </form>
+    <div class="container mx-auto p-4 text-black">
+        <h2 class="text-2xl font-bold mb-4">Create a New Post</h2>
+        <form method="post" enctype="multipart/form-data" class="my-4 bg-cover">
+            {% csrf_token %}        
+            <div class="mb-3">
+                <label for="{{ form.title.id_for_label }}">Title:</label>
+                {{ form.title }}
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.description.id_for_label }}">Description:</label>
+                {{ form.description }}
+            </div>
+            
+            <div class="mb-3">
+                <label for="{{ form.media.id_for_label }}">Media (Image/Video):</label>
+                {{ form.media }}
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.post_type.id_for_label }}">Post Type:</label>
+                {{ form.post_type }}
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.schedule_datetime.id_for_label }}">Schedule Date & Time:</label>
+                {{ form.schedule_datetime }}
+            </div>
+            <div class="mb-3">
+                <button type="submit"  class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Create Post</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

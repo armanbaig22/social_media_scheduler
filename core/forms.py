@@ -4,11 +4,24 @@ from django.utils import timezone
 
 
 class CreatePostForm(forms.Form):
-    title = forms.CharField(max_length=100, label='Title')
-    description = forms.CharField(widget=forms.Textarea, label='Description')
-    media = forms.FileField(label='Media (Image/Video)', required=False)
-    post_type = forms.ChoiceField(choices=[('draft', 'Draft'), ('schedule', 'Schedule')], initial='draft', label='Post Type')
-    schedule_datetime = forms.DateTimeField(widget=forms.TextInput(attrs={'type': 'datetime-local'}), label='Schedule Date & Time')
+    title = forms.CharField(max_length=100, label='Title', widget=forms.TextInput(attrs={'class': 'form-control mb-3'}))
+    description = forms.CharField(
+    label='Description',
+    widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows': 4}),
+    required=False,  # If applicable
+)
+
+    media = forms.FileField(label='Media (Image/Video)', required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control mb-3'}))
+    post_type = forms.ChoiceField(
+        choices=[('draft', 'Draft'), ('schedule', 'Schedule')],
+        initial='draft',
+        label='Post Type',
+        widget=forms.Select(attrs={'class': 'form-control mb-3'})
+    )
+    schedule_datetime = forms.DateTimeField(
+        widget=forms.TextInput(attrs={'type': 'datetime-local', 'class': 'form-control mb-3'}),
+        label='Schedule Date & Time'
+    )
 
     def clean_schedule_datetime(self):
         schedule_datetime = self.cleaned_data['schedule_datetime']
@@ -17,6 +30,7 @@ class CreatePostForm(forms.Form):
             raise forms.ValidationError("Scheduled date and time must be in the future.")
 
         return schedule_datetime
+
 
 
 class PostForm(forms.ModelForm):
