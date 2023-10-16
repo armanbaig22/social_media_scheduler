@@ -11,7 +11,7 @@ from .utils import generate_unique_filename, handle_uploaded_file
 
 
 def frontpage(request):
-    return render(request, "base.html")
+    return render(request, "frontpage.html")
 
 
 def login(request):
