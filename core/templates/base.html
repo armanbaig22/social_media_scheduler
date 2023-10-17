@@ -1,32 +1,44 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=devicewidth, initial-scale=1.0">
-        <title>{% block title %}{% endblock %}Auto Pilot</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}AutoPilot</title>
+    <style>
+        body {
+            background-image: url("{% static 'images/createformi.jpg' %}"); /* Replace with the path to your background image */
+            padding:0px;
+    margin: 0px;
+    overflow-y: hidden;
+            background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color:rgb(239, 243, 239);
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<nav class="flex items-center justify-between px-4 py-6 bg-teal-800">
+    <div>
+        <a href="/" class="text-xl text-white">AutoPilot</a>
+    </div>
 
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="bg-stone-200">
-        <nav class="flex items-center justify-between px-4 py-6 bg-teal-800">
-            <div>
-                <a href="/" class="text-xl text-white" >AutoPilot</a>
-            </div>
+    <div class="flex items-center space-x-4">
+        {% if request.user.is_authenticated %}
+            <a href="/profile/" class="text-white hover:text-gray-200">Profile</a>
+            <a href="/logout/" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Log out</a>
+        {% else %}
+            <a href="/login/" class="text-white hover:text-gray-200">Login</a>
+        {% endif %}
+    </div>
+</nav>
 
-            <div class="flex items-center space-x-4">
-                {% if request.user.is_authenticated %}
-                    <a href="/profile/" class="text-white hover:text-gray-200">Profile</a>
-                    <a href="/logout/" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Log out</a>
-                {% else %}
-                    <a href="/login/" class="text-white hover:text-gray-200">Login</a>
-                {% endif %}
-            </div>
-        </nav>
-        {% block content %}
-        {% endblock %}
+{% block content %}
+{% endblock %}
 
-        {% block scripts %}
-        {% endblock %}
-    </body>
+{% block scripts %}
+{% endblock %}
+</body>
 </html>
