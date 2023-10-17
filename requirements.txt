@@ -1,3 +1,6 @@
 django~=4.2.5
 celery~=5.3.4
 requests~=2.28.1
+django_celery_beat
+social-auth-app-django
+python-decouple
