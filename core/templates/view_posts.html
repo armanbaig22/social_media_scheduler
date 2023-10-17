@@ -3,37 +3,40 @@
 {% block title %}View Posts | {% endblock %}
 
 {% block content %}
-<h2 class="text-2xl font-bold mb-4">View Posts</h2>
-<ul>
-    {% for post in scheduled_posts %}
-        <li>
-            <div class="mb-4 border border-teal-600 p-4 rounded-lg"> <!-- Removed border width and added padding -->
-                <h3 class="text-lg font-bold mb-2">Post Information</h3>
-                <div class="pl-4"> <!-- Added padding to shift content to the right -->
-                    <strong>ID:</strong> {{ post.id }}<br>
-                    <strong>User Email:</strong> {{ post.user.email }}<br>
-                    <strong>Title:</strong> {{ post.title }}<br>
-                    <strong>Content:</strong> {{ post.content }}<br>
-                    {% if post.media.url != None %}
-                        <strong>Media:</strong> {{ post.media.url }}<br>
-                    {% endif %}
-                    <strong>Scheduled Datetime:</strong> {{ post.scheduled_datetime }}<br>
-                    <strong>Status:</strong> {{ post.status }}<br>
-                    <strong>Created At:</strong> {{ post.created_at }}<br>
-                    <strong>Updated At:</strong> {{ post.updated_at }}<br>
+<div class="container mx-auto p-4 text-black">
+    <h2 class="text-2xl font-bold mb-4">View Posts</h2>
+    <ul>
+        {% for post in scheduled_posts %}
+            <li>
+                <div class="  mb-4"> <!-- Added margin-bottom to create space between items -->
+                    <div class=" border border-teal-600 p-4 rounded-lg inline-block"> <!-- Added inline-block display -->
+                        <h3 class="text-lg font-bold mb-2">Post Information</h3>
+                        <strong>ID:</strong> {{ post.id }}<br>
+                        <strong>User Email:</strong> {{ post.user.email }}<br>
+                        <strong>Title:</strong> {{ post.title }}<br>
+                        <strong>Content:</strong> {{ post.content }}<br>
+                        {% if post.media.url != None %}
+                            <strong>Media:</strong> {{ post.media.url }}<br>
+                        {% endif %}
+                        <strong>Scheduled Datetime:</strong> {{ post.scheduled_datetime }}<br>
+                        <strong>Status:</strong> {{ post.status }}<br>
+                        <strong>Created At:</strong> {{ post.created_at }}<br>
+                        <strong>Updated At:</strong> {{ post.updated_at }}<br>
+                    </div>
+                    <div class="mt-4"> <!-- Added margin-top to create space between content and buttons -->
+                        <!-- Delete Post Button -->
+                        <a href="{% url 'delete_post' post.id %}" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Delete</a>
+                        <!-- Modify Post Link -->
+                        <a href="{% url 'modify_post' post.id %}" class="px-5 py-3 ml-4 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Modify</a>
+                    </div>
                 </div>
-                <div class="mt-4"> <!-- Added margin-top to create space between content and buttons -->
-                    <h3 class="text-lg font-bold mb-2">Actions</h3>
-                    <!-- Delete Post Button -->
-                    <a href="{% url 'delete_post' post.id %}" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Delete</a>
-                    <!-- Modify Post Link -->
-                    <a href="{% url 'modify_post' post.id %}" class="px-5 py-3 ml-4 rounded-xl text-white bg-teal-600 hover:bg-teal-700">Modify</a>
-                </div>
-            </div>
-        </li>
-        <hr>
-    {% empty %}
-        <li>No posts available.</li>
-    {% endfor %}
-</ul>
+            </li>
+            <hr>
+        {% empty %}
+        <div class="text-center">
+            <li>No posts available.</li>
+        </div>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
