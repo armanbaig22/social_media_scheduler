@@ -20,6 +20,9 @@ def schedule_and_post_content():
     for post in scheduled_posts:
         access_token = post.user.linkedin_access_token
         sub = post.user.linkedin_sub
+        # Update the post status to 'posted'
+        post.status = 'posted'
+        post.save()
         if post.media:
 
             image_file_path = settings.MEDIA_ROOT + "/" + str(post.media)
@@ -118,6 +121,4 @@ def schedule_and_post_content():
             else:
                 # Handle error
                 print(f"Error creating text share: {response.text}")
-        # Update the post status to 'posted'
-        post.status = 'posted'
-        post.save()
+
