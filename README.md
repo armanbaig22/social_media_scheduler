@@ -1,76 +1,117 @@
-# Auto Pilot
+Certainly, here's a simplified version of a README file that you can use as a starting point for your project. Please customize it further to fit your specific project requirements.
 
-Auto Pilot is a Django-based web application that is used to Schedule posts for later time
+---
 
-## Features
-
-- LinkedIn OAuth 2.0 authentication.
-- User profile creation based on LinkedIn data.
-- Secure user authentication.
-- Customizable templates and styles for seamless integration into your project.
-- An easy-to-follow structure for extending functionality.
-
+# Project Name
+Social Media Scheduler
+## Description
+Used to schedule the posts on LinkedIn.
 ## Prerequisites
 
-Before you begin, ensure you have met the following requirements:
+- Python (version X.X)
+- Django (version X.X)
+- Redis (version X.X) - For Celery and Celery Beat
 
-- Python 3.6 or higher installed on your system.
-- Django framework and other project dependencies installed. You can install them using:
+## Setup LinkedIn Developer Profile
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+To integrate your Django application with LinkedIn, you need to set up a LinkedIn Developer Profile. Follow these steps:
 
-- LinkedIn Developer Account: You'll need to create a LinkedIn Developer account and set up your application to obtain the client ID and client secret for LinkedIn OAuth 2.0 authentication.
+1. Visit the LinkedIn Developer portal at [https://developer.linkedin.com](https://developer.linkedin.com).
+
+2. Sign in or create an account if you don't have one.
+
+3. Create a new LinkedIn App by following the instructions on the developer portal.
+
+4. Once you've created the app, you'll receive a Client ID and Client Secret. You'll use these credentials in your Django project.
 
 ## Configuration
 
-1. Clone the repository to your local machine:
+### Django Configuration
 
-    ```bash
-    git clone https://github.com/your-username/auto-pilot.git
-    cd auto-pilot
-    ```
+1. Clone this repository to your local machine:
 
-2. Create a `.env` file in the project root directory and add your LinkedIn API credentials:
+   ```bash
+   git clone https://github.com/yourusername/your-repo.git
+   ```
 
-    ```env
-    LINKEDIN_CLIENT_ID=your-linkedin-client-id
-    LINKEDIN_CLIENT_SECRET=your-linkedin-client-secret
-    LINKEDIN_REDIRECT_URI=your-redirect-uri
-    ```
+2. Create a virtual environment and activate it:
 
-3. Apply database migrations:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+   ```
 
-    ```bash
-    python manage.py migrate
-    ```
+3. Install the required Python packages:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. In your Django project's settings (`settings.py`), add the LinkedIn API credentials you obtained earlier:
+
+   ```python
+   LINKEDIN_CLIENT_ID = 'your-client-id'
+   LINKEDIN_CLIENT_SECRET = 'your-client-secret'
+   LINKEDIN_REDIRECT_URI = 'http://localhost:8000/auth/linkedin/callback'
+   ```
+
+### Celery and Celery Beat Configuration
+
+1. Install and configure Redis:
+
+   - Install Redis (if not already installed).
+   - Start the Redis server.
+
+2. In your Django project's settings (`settings.py`), configure Celery and Celery Beat:
+
+   ```python
+   # settings.py
+
+   # Celery configuration
+   CELERY_BROKER_URL = 'redis://localhost:6379/0'
+   CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+   # Celery Beat configuration
+   CELERY_BEAT_SCHEDULE = {
+       'your-task-name': {
+           'task': 'yourapp.tasks.your_task_function',
+           'schedule': timedelta(minutes=30),  # Adjust the schedule as needed
+       },
+   }
+   ```
 
 ## Running the Application
 
-4. Start the development server:
+1. Apply database migrations:
 
-    ```bash
-    python manage.py runserver
-    ```
+   ```bash
+   python manage.py migrate
+   ```
 
-5. Access the application in your web browser at `http://localhost:8000`.
+2. Start the Django development server:
 
-## LinkedIn Authentication
+   ```bash
+   python manage.py runserver
+   ```
 
-6. Click on the "Login with LinkedIn" button to initiate the LinkedIn authentication process.
+3. Start Celery for background tasks:
 
-7. After successful authentication, you will be redirected to your profile page.
+   ```bash
+   celery -A yourproject worker --loglevel=info
+   ```
 
-## Logging Out
+4. Start Celery Beat for scheduled tasks:
 
-8. To log out, click on the "Logout" button.
+   ```bash
+   celery -A yourproject beat --loglevel=info
+   ```
 
-## Customization
+5. Access the application in your web browser at [http://localhost:8000](http://localhost:8000).
 
-You can customize the project to fit your specific needs by modifying the templates, views, and stylesheets provided in the project directory.
+## License
 
-## Contributing
+This project is licensed under the XYZ License - see the [LICENSE](LICENSE) file for details.
 
-If you would like to contribute to this project or report issues, please follow our [Contributing Guidelines](CONTRIBUTING.md).
+---
 
+Make sure to replace placeholders (e.g., `your-client-id`, `your-client-secret`, `yourapp.tasks.your_task_function`, `yourproject`) with your actual project-specific values. This README provides a basic outline for setting up your project and configuring LinkedIn integration and Celery tasks. You can expand it with more details, usage instructions, and any other relevant information about your project.
