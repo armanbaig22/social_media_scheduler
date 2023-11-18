@@ -1,5 +1,3 @@
-Certainly, here's a simplified version of a README file that you can use as a starting point for your project. Please customize it further to fit your specific project requirements.
-
 ---
 
 # Project Name
