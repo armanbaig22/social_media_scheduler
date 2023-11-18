@@ -108,4 +108,4 @@ To integrate your Django application with LinkedIn, you need to set up a LinkedI
 
 ---
 
-Make sure to replace placeholders (e.g., `your-client-id`, `your-client-secret`, `yourapp.tasks.your_task_function`, `yourproject`) with your actual project-specific values. This README provides a basic outline for setting up your project and configuring LinkedIn integration and Celery tasks. You can expand it with more details, usage instructions, and any other relevant information about your project.
+Make sure to replace placeholders (e.g., `your-client-id`, `your-client-secret`) with your actual project-specific values. This README provides a basic outline for setting up your project and configuring LinkedIn integration and Celery tasks.
