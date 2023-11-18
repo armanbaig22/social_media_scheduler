@@ -108,10 +108,6 @@ To integrate your Django application with LinkedIn, you need to set up a LinkedI
 
 5. Access the application in your web browser at [http://localhost:8000](http://localhost:8000).
 
-## License
-
-This project is licensed under the XYZ License - see the [LICENSE](LICENSE) file for details.
-
 ---
 
 Make sure to replace placeholders (e.g., `your-client-id`, `your-client-secret`, `yourapp.tasks.your_task_function`, `yourproject`) with your actual project-specific values. This README provides a basic outline for setting up your project and configuring LinkedIn integration and Celery tasks. You can expand it with more details, usage instructions, and any other relevant information about your project.
